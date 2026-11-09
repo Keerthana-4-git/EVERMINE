@@ -2,6 +2,26 @@
 
 Updated: 2026-11-09 (final change-recovery and project-health checkpoint)
 
+## Supabase migration audit checkpoint
+
+The local migration `supabase/migrations/20261109120000_initial_schema.sql` was statically audited. No SQL was applied to Supabase, no IndexedDB records were read or changed, and no credentials were accessed or displayed.
+
+- The schema declares 39 public tables. Static inspection found RLS enabled directly or by the migration's owner-policy loop for all 39 tables.
+- The migration contains 111 generated/explicit table policies and 5 Storage policies. The `private-photos`, `profile-photos`, and `book-assets` buckets are declared private with MIME and size limits.
+- A security review found no exploitable vulnerabilities in the migration. Shared-album checks distinguish viewers, contributors, and editors; invitations do not have a database insert/accept workflow and remain unimplemented for the cloud backend.
+- The database trigger blocks opening a sealed time capsule before its unlock time. This was reviewed statically only.
+- Static FK-index coverage found 58 missing indexes. Those indexes have been added to the local migration, covering the FK columns not already indexed by a primary key, unique constraint, or existing index.
+- No ownership-policy or relationship constraint was changed. This does not constitute a live two-user authorization test or prove that every cross-table reference is tenant-consistent.
+- No PostgreSQL parser, Supabase CLI, or configured Supabase project is available here. SQL syntax, migration execution, RLS behavior, and Storage behavior remain unverified against PostgreSQL.
+- Post-change static index check: all 39 public tables were found and every declared FK column is covered by a leading PK/unique/index column. The migration has 63 explicit indexes after the 58 additions.
+- `npm run build`: passed (`tsc -b` and Vite production build); Vite emitted a large-chunk advisory for the 666.40 kB main bundle.
+- `npm run lint`: passed with two warnings: React Compiler compatibility at `src/pages/AuthPage.tsx:140` and `react(set-state-in-effect)` at `src/data/MemoryProvider.tsx:189`.
+- These frontend checks do not parse or validate the SQL migration.
+
+### Applying the reviewed migration later
+
+The migration remains unapplied. Follow the safe SQL Editor procedure in `BACKEND_SETUP.md` against a new/disposable Supabase project first. Do not use production for the first application, and do not rerun it blindly after a partial failure. Run two-user RLS and Storage tests before any production decision. This audit did not start photo migration or deployment.
+
 ## Existing application
 
 - Stages A–G remain in the project and continue to use local IndexedDB and local demo authentication.

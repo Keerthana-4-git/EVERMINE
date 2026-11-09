@@ -414,6 +414,65 @@ create table public.deleted_photos (
   purge_after timestamptz not null default (now() + interval '30 days')
 );
 
+create index photo_tags_owner_id_idx on public.photo_tags (owner_id);
+create index albums_cover_photo_id_idx on public.albums (cover_photo_id);
+create index album_photos_owner_id_idx on public.album_photos (owner_id);
+create index favorites_photo_id_idx on public.favorites (photo_id);
+create index photo_comments_photo_id_idx on public.photo_comments (photo_id);
+create index photo_comments_author_id_idx on public.photo_comments (author_id);
+create index memory_stories_owner_id_idx on public.memory_stories (owner_id);
+create index story_photos_photo_id_idx on public.story_photos (photo_id);
+create index story_photos_owner_id_idx on public.story_photos (owner_id);
+create index prompt_responses_owner_id_idx on public.prompt_responses (owner_id);
+create index prompt_responses_prompt_id_idx on public.prompt_responses (prompt_id);
+create index prompt_response_photos_photo_id_idx on public.prompt_response_photos (photo_id);
+create index prompt_response_photos_owner_id_idx on public.prompt_response_photos (owner_id);
+create index timeline_events_owner_id_idx on public.timeline_events (owner_id);
+create index timeline_events_photo_id_idx on public.timeline_events (photo_id);
+create index memory_books_owner_id_idx on public.memory_books (owner_id);
+create index memory_books_cover_photo_id_idx on public.memory_books (cover_photo_id);
+create index memory_book_pages_owner_id_idx on public.memory_book_pages (owner_id);
+create index memory_book_page_photos_photo_id_idx on public.memory_book_page_photos (photo_id);
+create index memory_book_page_photos_owner_id_idx on public.memory_book_page_photos (owner_id);
+create index memory_reels_owner_id_idx on public.memory_reels (owner_id);
+create index memory_reel_items_owner_id_idx on public.memory_reel_items (owner_id);
+create index memory_reel_items_photo_id_idx on public.memory_reel_items (photo_id);
+create index time_capsules_owner_id_idx on public.time_capsules (owner_id);
+create index time_capsules_cover_photo_id_idx on public.time_capsules (cover_photo_id);
+create index time_capsule_photos_photo_id_idx on public.time_capsule_photos (photo_id);
+create index time_capsule_photos_owner_id_idx on public.time_capsule_photos (owner_id);
+create index time_capsule_stories_story_id_idx on public.time_capsule_stories (story_id);
+create index time_capsule_stories_owner_id_idx on public.time_capsule_stories (owner_id);
+create index family_members_owner_id_idx on public.family_members (owner_id);
+create index family_members_photo_id_idx on public.family_members (photo_id);
+create index family_stories_owner_id_idx on public.family_stories (owner_id);
+create index family_story_members_member_id_idx on public.family_story_members (member_id);
+create index family_story_members_owner_id_idx on public.family_story_members (owner_id);
+create index family_story_photos_photo_id_idx on public.family_story_photos (photo_id);
+create index family_story_photos_owner_id_idx on public.family_story_photos (owner_id);
+create index family_milestones_owner_id_idx on public.family_milestones (owner_id);
+create index family_milestones_member_id_idx on public.family_milestones (member_id);
+create index family_milestones_photo_id_idx on public.family_milestones (photo_id);
+create index memory_walls_owner_id_idx on public.memory_walls (owner_id);
+create index memory_wall_items_photo_id_idx on public.memory_wall_items (photo_id);
+create index memory_wall_items_owner_id_idx on public.memory_wall_items (owner_id);
+create index shared_albums_owner_id_idx on public.shared_albums (owner_id);
+create index shared_albums_album_id_idx on public.shared_albums (album_id);
+create index shared_album_members_user_id_idx on public.shared_album_members (user_id);
+create index shared_album_invitations_shared_album_id_idx on public.shared_album_invitations (shared_album_id);
+create index shared_album_invitations_inviter_id_idx on public.shared_album_invitations (inviter_id);
+create index shared_album_photos_photo_id_idx on public.shared_album_photos (photo_id);
+create index shared_album_photos_added_by_idx on public.shared_album_photos (added_by);
+create index shared_album_comments_shared_album_id_idx on public.shared_album_comments (shared_album_id);
+create index shared_album_comments_photo_id_idx on public.shared_album_comments (photo_id);
+create index shared_album_comments_author_id_idx on public.shared_album_comments (author_id);
+create index shared_album_reactions_photo_id_idx on public.shared_album_reactions (photo_id);
+create index shared_album_reactions_user_id_idx on public.shared_album_reactions (user_id);
+create index shared_album_activity_shared_album_id_idx on public.shared_album_activity (shared_album_id);
+create index shared_album_activity_actor_id_idx on public.shared_album_activity (actor_id);
+create index ai_suggestions_owner_id_idx on public.ai_suggestions (owner_id);
+create index deleted_photos_owner_id_idx on public.deleted_photos (owner_id);
+
 create or replace function public.is_shared_album_member(target_album uuid)
 returns boolean
 language sql

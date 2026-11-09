@@ -32,15 +32,16 @@ Supabase sessions are persisted by the official client. NEVER use a service-role
 
 The initial schema is `supabase/migrations/20261109120000_initial_schema.sql`. It defines the initial profiles, photo metadata, albums, stories, prompts, timeline, books, reels, capsules, family, shared-album, wall, settings, notification, and suggestion tables; private storage buckets; RLS policies; and a database-side time-capsule unlock guard.
 
-Review the migration and its RLS rules in a disposable Supabase project first. The Supabase CLI is not currently installed in this repository. After installing it and linking the intended project, the normal deployment commands are:
+The local migration was statically reviewed and its missing foreign-key indexes were added. It has **not** been parsed or applied by PostgreSQL, and its RLS and Storage policies have not been tested against a Supabase project. For a first application:
 
-```sh
-npx supabase login
-npx supabase link --project-ref YOUR_PROJECT_REF
-npx supabase db push
-```
+1. Create a new disposable Supabase project for this test. Do not select a production project.
+2. In the Supabase Dashboard, confirm the selected project and its project reference, then open **SQL Editor** and choose **New query**.
+3. Open `supabase/migrations/20261109120000_initial_schema.sql` from this workspace, review the complete file, and paste its complete contents into the SQL Editor.
+4. Run the query once. Confirm that the Editor reports success and inspect its output. If it fails, stop and investigate the exact error and resulting schema state; do not blindly rerun the whole migration or manually delete objects to retry.
+5. In **Table Editor**, confirm the expected public tables exist. In the table/RLS controls, confirm RLS is enabled. In **Storage**, confirm all three buckets (`private-photos`, `profile-photos`, and `book-assets`) are private and inspect their policies.
+6. Before considering a production application, test owner isolation and each shared-album role with separate accounts, capsule unlock enforcement, and Storage access. Record and resolve any failures in the disposable project first.
 
-Do not run these commands against a production project until the schema and authorization tests have been reviewed. The migration has not been applied or validated against a live Supabase/PostgreSQL instance.
+This is a one-time initial-schema script, not a repeatable repair script. No migration application, live policy test, or production change has been performed for this workspace. The Supabase CLI is not installed here; if CLI-based migration management is adopted later, use a separate reviewed workflow rather than mixing it with the Dashboard application.
 
 ## 4. Current storage boundary
 
